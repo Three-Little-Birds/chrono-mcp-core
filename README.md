@@ -2,8 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-brightgreen.svg)](pyproject.toml)
+[![CI](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml/badge.svg)](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml)
 
-Reusable Python toolkit for building [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) services around [Project Chrono](https://projectchrono.org/) structural simulations.
+Reusable, domain-neutral Python toolkit for building [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) services around [Project Chrono](https://projectchrono.org/) structural simulations.
 
 ## Features
 
@@ -13,16 +14,10 @@ Reusable Python toolkit for building [Model Context Protocol](https://modelconte
 
 ## Installation
 
-This repository is private; install it directly from GitHub:
+Install directly from GitHub until a PyPI release is available:
 
 ```bash
-pip install "git+ssh://git@github.com/yevheniikravchuk/chrono-mcp-core.git"
-```
-
-Or add it to `pyproject.toml`:
-
-```toml
-chrono-mcp-core = { git = "ssh://git@github.com/yevheniikravchuk/chrono-mcp-core.git" }
+pip install "git+https://github.com/yevheniikravchuk/chrono-mcp-core.git"
 ```
 
 ## Usage
