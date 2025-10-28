@@ -4,7 +4,13 @@
 [![Python](https://img.shields.io/badge/python-3.11+-brightgreen.svg)](pyproject.toml)
 [![CI](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml/badge.svg)](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml)
 
-Reusable, domain-neutral Python toolkit for building [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) services around [Project Chrono](https://projectchrono.org/) structural simulations.
+Model Context Protocol (MCP) helper toolkit for building services around [Project Chrono](https://projectchrono.org/) structural simulations.
+
+## Why you might want this
+
+- **Share Chrono scaffolding** – reuse the same request/response models across multiple MCP transports.
+- **Test without Chrono** – the deterministic reference solver makes it easy to stub responses in CI.
+- **Keep integrations small** – import the helper, wire MCP tools, and focus on job orchestration instead of subprocess plumbing.
 
 ## Features
 

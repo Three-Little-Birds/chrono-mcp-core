@@ -9,6 +9,7 @@ from chrono_mcp_core import StructuralInput, run_structural_analysis
 
 
 def test_run_structural_analysis_produces_positive_deflection() -> None:
+    """Ensure the helper returns sensible metrics with default parameters."""
     config = StructuralInput(
         vehicle_mass_kg=0.45,
         payload_mass_kg=0.05,
