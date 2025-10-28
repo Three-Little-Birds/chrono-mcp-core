@@ -1,37 +1,29 @@
-# chrono-mcp-core
+# chrono-mcp-core · A Classroom Core for Project Chrono MCP Integrations
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-brightgreen.svg)](pyproject.toml)
 [![CI](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml/badge.svg)](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml)
 
-Model Context Protocol (MCP) helper toolkit for building services around [Project Chrono](https://projectchrono.org/) structural simulations.
+`chrono-mcp-core` packages a small, well-documented scaffold for running [Project Chrono](https://projectchrono.org/) structural analyses inside Model Context Protocol services. It also ships with a deterministic reference solver so learners can explore the API without installing Chrono.
 
-## Why you might want this
+## What you will practice
 
-- **Share Chrono scaffolding** – reuse the same request/response models across multiple MCP transports.
-- **Test without Chrono** – the deterministic reference solver makes it easy to stub responses in CI.
-- **Keep integrations small** – import the helper, wire MCP tools, and focus on job orchestration instead of subprocess plumbing.
+- Describe a structural load case with strongly typed models.
+- Run the reference solver to understand the expected outputs.
+- Wrap the helper in an MCP tool or FastAPI endpoint to share with your agent.
 
-## Features
-
-- Pydantic models (`StructuralInput`, `StructuralMetrics`) that describe structural load cases in a tooling-friendly way.
-- Deterministic reference solver (`run_structural_analysis`) suitable for unit testing, stubs, or environments without Chrono installed.
-- MIT-licensed, type hinted package that drops cleanly into MCP servers built with the [python-sdk](https://github.com/modelcontextprotocol/python-sdk).
-
-## Installation
-
-Install directly from GitHub until a PyPI release is available:
+## Step 1 – Install the helper
 
 ```bash
-pip install "git+https://github.com/yevheniikravchuk/chrono-mcp-core.git"
+uv pip install "git+https://github.com/yevheniikravchuk/chrono-mcp-core.git"
 ```
 
-## Usage
+## Step 2 – Define a structural scenario
 
 ```python
 from chrono_mcp_core import StructuralInput, run_structural_analysis
 
-config = StructuralInput(
+case = StructuralInput(
     vehicle_mass_kg=0.45,
     payload_mass_kg=0.05,
     stiffness_n_m=1800.0,
@@ -40,11 +32,13 @@ config = StructuralInput(
     gravity_m_s2=9.80665,
 )
 
-metrics = run_structural_analysis(config)
-print(metrics.deflection_m)
+metrics = run_structural_analysis(case)
+print(metrics.deflection_m, metrics.stress_pa)
 ```
 
-### Quickstart (MCP integration)
+The default implementation uses a simplified mass-spring-damper model. When you integrate real Chrono simulations, import this package and swap the solver for your project-specific logic while keeping the same request/response types.
+
+## Step 3 – Expose through MCP
 
 ```python
 from mcp.server.fastmcp import FastMCP
@@ -60,39 +54,24 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
-Run the tool using the MCP CLI:
+Agents can now ask questions like “what is the deflection if payload doubles?” by tweaking payload mass in the request.
+
+## Going further
+
+- **Swap the solver:** drop your Chrono invocation into a function with the same signature as `run_structural_analysis`.
+- **Add validation:** extend `StructuralInput` with custom validators for project-specific constraints.
+- **Log experiments:** store the returned metrics alongside impact events or CFD data for a richer dataset.
+
+## Development
 
 ```bash
-uv run mcp dev examples/chrono_tool.py
-```
-
-## Local development
-
-Prerequisites:
-
-- Python 3.11+
-- [`uv`](https://github.com/astral-sh/uv)
-
-```bash
-uv pip install --system -e ".[dev]"
+uv pip install --system -e .[dev]
 uv run ruff check .
 uv run pytest
 ```
 
-## Repository structure
-
-```
-chrono-mcp-core/
-├── src/chrono_mcp_core/
-├── tests/
-├── pyproject.toml
-└── .github/workflows/ci.yml
-```
+Tests use the deterministic solver, making it easy to understand the math behind the responses.
 
 ## License
 
-Released under the MIT License. See [LICENSE](LICENSE).
-
-## Support
-
-Open an issue or submit a pull request with improvements. Please include tests and documentation updates where appropriate.
+MIT — see [LICENSE](LICENSE).
