@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-brightgreen.svg)](pyproject.toml)
-[![CI](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml/badge.svg)](https://github.com/yevheniikravchuk/chrono-mcp-core/actions/workflows/ci.yml)
+[![CI](https://github.com/Three-Little-Birds/chrono-mcp-core/actions/workflows/ci.yml/badge.svg)](https://github.com/Three-Little-Birds/chrono-mcp-core/actions/workflows/ci.yml)
 
 `chrono-mcp-core` packages a small, well-documented scaffold for running [Project Chrono](https://projectchrono.org/) structural analyses inside Model Context Protocol services. It also ships with a deterministic reference solver so learners can explore the API without installing Chrono.
 
@@ -15,7 +15,7 @@
 ## Step 1 – Install the helper
 
 ```bash
-uv pip install "git+https://github.com/yevheniikravchuk/chrono-mcp-core.git"
+uv pip install "git+https://github.com/Three-Little-Birds/chrono-mcp-core.git"
 ```
 
 ## Step 2 – Define a structural scenario

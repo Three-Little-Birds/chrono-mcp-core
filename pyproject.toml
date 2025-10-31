@@ -17,8 +17,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yevheniikravchuk/chrono-mcp-core"
-Repository = "https://github.com/yevheniikravchuk/chrono-mcp-core"
+Homepage = "https://github.com/Three-Little-Birds/chrono-mcp-core"
+Repository = "https://github.com/Three-Little-Birds/chrono-mcp-core"
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
