@@ -1,77 +1,62 @@
-# chrono-mcp-core · A Classroom Core for Project Chrono MCP Integrations
+# chrono-mcp-core · Multibody building blocks for MCP services
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11+-brightgreen.svg)](pyproject.toml)
-[![CI](https://github.com/Three-Little-Birds/chrono-mcp-core/actions/workflows/ci.yml/badge.svg)](https://github.com/Three-Little-Birds/chrono-mcp-core/actions/workflows/ci.yml)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.10%2B-3776AB.svg" alt="Python 3.10 or newer"></a>
+  <img src="https://img.shields.io/badge/status-incubating-ff9800.svg" alt="Project status: incubating">
+  <img src="https://img.shields.io/badge/MCP-core-blueviolet.svg" alt="MCP core library badge">
+</p>
 
-`chrono-mcp-core` packages a small, well-documented scaffold for running [Project Chrono](https://projectchrono.org/) structural analyses inside Model Context Protocol services. It also ships with a deterministic reference solver so learners can explore the API without installing Chrono.
+> **TL;DR**: Reusable helpers (config loading, process management, metrics logging) for wrapping [Project Chrono](https://projectchrono.org/) in MCP services.
 
-## What you will practice
+## Table of contents
 
-- Describe a structural load case with strongly typed models.
-- Run the reference solver to understand the expected outputs.
-- Wrap the helper in an MCP tool or FastAPI endpoint to share with your agent.
+1. [Why integrators love it](#why-integrators-love-it)
+2. [Quickstart](#quickstart)
+3. [Key modules](#key-modules)
+4. [Stretch ideas](#stretch-ideas)
+5. [Accessibility & upkeep](#accessibility--upkeep)
+6. [Contributing](#contributing)
 
-## Step 1 – Install the helper
+## Why integrators love it
+
+| Persona | Immediate value | Longer-term payoff |
+|---------|-----------------|--------------------|
+| **Service authors** | Ready-made config loaders and logging helpers for Chrono simulations. | Consistent archives and metadata across MCP services. |
+| **Tooling teams** | Typed dataclasses for request/response payloads. | Makes it easy to reuse the same MCP layer in other multibody solvers.
+
+## Quickstart
 
 ```bash
 uv pip install "git+https://github.com/Three-Little-Birds/chrono-mcp-core.git"
 ```
 
-## Step 2 – Define a structural scenario
+Inspect the examples under `examples/` to see how to launch Chrono jobs and capture metrics.
 
-```python
-from chrono_mcp_core import StructuralInput, run_structural_analysis
+## Key modules
 
-case = StructuralInput(
-    vehicle_mass_kg=0.45,
-    payload_mass_kg=0.05,
-    stiffness_n_m=1800.0,
-    damping_ratio=0.2,
-    reference_area_m2=0.12,
-    gravity_m_s2=9.80665,
-)
+- `chrono_mcp_core.config` – discover solver paths, activate environments.
+- `chrono_mcp_core.runner` – spawn Chrono jobs with timeout + archive logic.
+- `chrono_mcp_core.metrics` – standardise JSON metrics for the Continuous Evidence Engine.
 
-metrics = run_structural_analysis(case)
-print(metrics.deflection_m, metrics.stress_pa)
-```
+Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
-The default implementation uses a simplified mass-spring-damper model. When you integrate real Chrono simulations, import this package and swap the solver for your project-specific logic while keeping the same request/response types.
+## Stretch ideas
 
-## Step 3 – Expose through MCP
+1. Extend the metrics schema to include fatigue/deflection data for structural dashboards.
+2. Add container discovery helpers similar to the diffSPH stack.
+3. Contribute a Chrono smoke test script for CI parity with other solvers.
 
-```python
-from mcp.server.fastmcp import FastMCP
-from chrono_mcp_core import StructuralInput, run_structural_analysis
+## Accessibility & upkeep
 
-mcp = FastMCP("chrono-mcp", "Chrono structural analysis")
+- Minimal badge stack with alt text keeps the hero block informative and scannable.【turn0search0】
+- Tests run via `uv run pytest`; feel free to add more stubs to grow coverage.
+- Keep configuration defaults in sync with the consuming services (`mcp_chrono`).
 
-@mcp.tool()
-def solve(request: StructuralInput):
-    return run_structural_analysis(request)
+## Contributing
 
-if __name__ == "__main__":
-    mcp.run()
-```
+1. `uv pip install --system -e .[dev]`
+2. `uv run ruff check .` & `uv run pytest`
+3. Document new helpers in the README so downstream services know what changed.
 
-Agents can now ask questions like “what is the deflection if payload doubles?” by tweaking payload mass in the request.
-
-## Going further
-
-- **Swap the solver:** drop your Chrono invocation into a function with the same signature as `run_structural_analysis`.
-- **Add validation:** extend `StructuralInput` with custom validators for project-specific constraints.
-- **Log experiments:** store the returned metrics alongside impact events or CFD data for a richer dataset.
-
-## Development
-
-```bash
-uv pip install --system -e .[dev]
-uv run ruff check .
-uv run pytest
-```
-
-Tests use the deterministic solver, making it easy to understand the math behind the responses.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+MIT license — see [LICENSE](LICENSE).
