@@ -1,4 +1,4 @@
-# chrono-mcp-core · Multibody building blocks for MCP services
+# chrono-mcp-core - Multibody building blocks for MCP services
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
@@ -35,9 +35,9 @@ Inspect the examples under `examples/` to see how to launch Chrono jobs and capt
 
 ## Key modules
 
-- `chrono_mcp_core.config` – discover solver paths, activate environments.
-- `chrono_mcp_core.runner` – spawn Chrono jobs with timeout + archive logic.
-- `chrono_mcp_core.metrics` – standardise JSON metrics for the Continuous Evidence Engine.
+- `chrono_mcp_core.config` - discover solver paths, activate environments.
+- `chrono_mcp_core.runner` - spawn Chrono jobs with timeout + archive logic.
+- `chrono_mcp_core.metrics` - standardise JSON metrics for the Continuous Evidence Engine.
 
 Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
@@ -49,7 +49,7 @@ Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
 ## Accessibility & upkeep
 
-- Minimal badge stack with alt text keeps the hero block informative and scannable.【turn0search0】
+- Minimal badge stack with alt text keeps the hero block informative and scannable.[turn0search0]
 - Tests run via `uv run pytest`; feel free to add more stubs to grow coverage.
 - Keep configuration defaults in sync with the consuming services (`mcp_chrono`).
 
@@ -59,4 +59,4 @@ Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 2. `uv run ruff check .` & `uv run pytest`
 3. Document new helpers in the README so downstream services know what changed.
 
-MIT license — see [LICENSE](LICENSE).
+MIT license - see [LICENSE](LICENSE).
