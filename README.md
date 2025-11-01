@@ -49,7 +49,7 @@ Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
 ## Accessibility & upkeep
 
-- Minimal badge stack with alt text keeps the hero block informative and scannable.[turn0search0]
+- Minimal badge stack with alt text keeps the hero block informative and scannable.
 - Tests run via `uv run pytest`; feel free to add more stubs to grow coverage.
 - Keep configuration defaults in sync with the consuming services (`mcp_chrono`).
 
