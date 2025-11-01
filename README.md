@@ -10,19 +10,20 @@
 
 ## Table of contents
 
-1. [Integration highlights](#integration-highlights)
+1. [What it provides](#what-it-provides)
 2. [Quickstart](#quickstart)
 3. [Key modules](#key-modules)
 4. [Stretch ideas](#stretch-ideas)
 5. [Accessibility & upkeep](#accessibility--upkeep)
 6. [Contributing](#contributing)
 
-## Integration highlights
+## What it provides
 
-| Persona | Immediate value | Longer-term payoff |
-|---------|-----------------|--------------------|
-| **Service authors** | Ready-made config loaders and logging helpers for Chrono simulations. | Consistent archives and metadata across MCP services. |
-| **Tooling teams** | Typed dataclasses for request/response payloads. | Makes it easy to reuse the same MCP layer in other multibody solvers.
+| Scenario | Value |
+|----------|-------|
+| Chrono job orchestration | Launch [Project Chrono](https://projectchrono.org/) simulations with consistent process control, archiving, and logging. |
+| Typed payloads | Share request/response dataclasses so MCP services can reuse the same schema. |
+| Evidence logging | Emit metrics and metadata that downstream evidence pipelines can aggregate.
 
 ## Quickstart
 
