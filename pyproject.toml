@@ -2,7 +2,7 @@
 name = "chrono-mcp-core"
 version = "0.1.0"
 description = "Core models and utilities for Chrono MCP services"
-authors = [{ name = "Orthodrone R&D" }]
+authors = [{ name = "Three Little Birds" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
