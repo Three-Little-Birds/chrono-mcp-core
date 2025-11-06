@@ -31,7 +31,7 @@
 uv pip install "git+https://github.com/Three-Little-Birds/chrono-mcp-core.git"
 ```
 
-Use the built-in stub during development:
+Use the built-in stub during development (include `reference_area_m2`, which became a required field in the latest release):
 
 ```python
 from chrono_mcp_core import StructuralInput, run_structural_analysis
@@ -41,6 +41,7 @@ request = StructuralInput(
     payload_mass_kg=0.8,
     stiffness_n_m=1800.0,
     damping_ratio=0.12,
+    reference_area_m2=0.5,
 )
 metrics = run_structural_analysis(request)
 print(metrics)
@@ -102,8 +103,8 @@ Expected result:
   "damping_ratio": 0.08,
   "deflection_m": 0.032689,
   "stress_pa": 81.722083,
-  "damping_coefficient": 1.549193,
-  "natural_frequency_hz": 2.755456
+  "damping_coefficient": 13.856406,
+  "natural_frequency_hz": 2.756644
 }
 ```
 ## Stretch ideas
