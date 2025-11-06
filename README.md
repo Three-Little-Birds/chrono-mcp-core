@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/MCP-core-blueviolet.svg" alt="MCP core library badge">
 </p>
 
-> **TL;DR**: Reusable helpers (config loading, process management, metrics logging) for wrapping [Project Chrono](https://projectchrono.org/) in MCP services.
+> **TL;DR**: Reusable input/output models plus a deterministic structural stub that MCP services can share while you wire in [Project Chrono](https://projectchrono.org/) or other multibody solvers.
 
 ## Table of contents
 
@@ -21,9 +21,9 @@
 
 | Scenario | Value |
 |----------|-------|
-| Chrono job orchestration | Launch [Project Chrono](https://projectchrono.org/) simulations with consistent process control, archiving, and logging. |
-| Typed payloads | Share request/response dataclasses so MCP services can reuse the same schema. |
-| Evidence logging | Emit metrics and metadata that downstream evidence pipelines can aggregate.
+| Shared schema | `StructuralInput` / `StructuralMetrics` dataclasses so multiple services agree on requests and responses. |
+| Deterministic stub | `run_structural_analysis` delivers consistent metrics without Chrono – ideal for unit tests and CI. |
+| Drop-in hook | Replace the stub with real Chrono calls while preserving the response schema.
 
 ## Quickstart
 
@@ -31,23 +31,27 @@
 uv pip install "git+https://github.com/Three-Little-Birds/chrono-mcp-core.git"
 ```
 
-Chrono itself must be installed separately (see the [Project Chrono install guide](https://projectchrono.org/download/)). Once `chrono::ChSystem` binaries are available, you can wrap a job like this:
+Use the built-in stub during development:
 
 ```python
-from chrono_mcp_core.config import ChronoConfig, load_config
-from chrono_mcp_core.runner import run_chrono_job
+from chrono_mcp_core import StructuralInput, run_structural_analysis
 
-config = load_config(default_root="~/chrono-project")
-result = run_chrono_job(config, input_script="scripts/pendulum.py", job_label="demo")
-print("Artifacts:", result.artifacts)
-print("Metrics:", result.metrics)
+request = StructuralInput(
+    vehicle_mass_kg=4.2,
+    payload_mass_kg=0.8,
+    stiffness_n_m=1800.0,
+    damping_ratio=0.12,
+)
+metrics = run_structural_analysis(request)
+print(metrics)
 ```
+
+When you are ready to call a high-fidelity Chrono or FEM solver, swap out `run_structural_analysis` with your integration but keep the same I/O models.
 
 ## Key modules
 
-- `chrono_mcp_core.config` - discover solver paths, activate environments.
-- `chrono_mcp_core.runner` - spawn Chrono jobs with timeout + archive logic.
-- `chrono_mcp_core.metrics` - standardise JSON metrics (e.g., peak acceleration, joint travel, energy) for downstream dashboards.
+- `chrono_mcp_core.models` - Pydantic dataclasses describing structural inputs and metrics.
+- `chrono_mcp_core.solver` - deterministic stub returning stiffness/deflection/energy metrics.
 
 Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
