@@ -48,6 +48,12 @@ print(metrics)
 
 When you are ready to call a high-fidelity Chrono or FEM solver, swap out `run_structural_analysis` with your integration but keep the same I/O models.
 
+### Integrating a real solver
+
+1. Keep the `StructuralInput` / `StructuralMetrics` models as your contract.
+2. Replace `chrono_mcp_core.solver.run_structural_analysis` with a wrapper that launches your Chrono job, then map the results back into `StructuralMetrics`.
+3. Preserve deterministic rounding (the stub uses `round(..., 6)`) so unit tests stay stable.
+
 ## Key modules
 
 - `chrono_mcp_core.models` - Pydantic dataclasses describing structural inputs and metrics.
@@ -55,6 +61,51 @@ When you are ready to call a high-fidelity Chrono or FEM solver, swap out `run_s
 
 Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
+### Metric definitions
+
+| Field | Units | Formula (stub) |
+|-------|-------|----------------|
+| `total_mass_kg` | kg | `vehicle_mass_kg + payload_mass_kg` |
+| `stiffness_n_m` | N/m | input stiffness (rounded) |
+| `damping_ratio` | unitless | input damping ratio (rounded) |
+| `deflection_m` | m | `(total_mass * g) / stiffness` |
+| `stress_pa` | Pa | `(total_mass * g) / reference_area` |
+| `damping_coefficient` | N·s/m | `2 ζ sqrt(k m)` |
+| `natural_frequency_hz` | Hz | `sqrt(k / m) / (2π)` |
+
+The stub uses `g = 9.80665` (from the input) and rounds to six decimal places to guarantee determinism.
+
+Deterministic example:
+
+```python
+from chrono_mcp_core import StructuralInput, run_structural_analysis
+
+metrics = run_structural_analysis(
+    StructuralInput(
+        vehicle_mass_kg=4.0,
+        payload_mass_kg=1.0,
+        stiffness_n_m=1500.0,
+        damping_ratio=0.08,
+        gravity_m_s2=9.80665,
+        reference_area_m2=0.6,
+    )
+)
+print(metrics.model_dump())
+```
+
+Expected result:
+
+```json
+{
+  "total_mass_kg": 5.0,
+  "stiffness_n_m": 1500.0,
+  "damping_ratio": 0.08,
+  "deflection_m": 0.032689,
+  "stress_pa": 81.722083,
+  "damping_coefficient": 1.549193,
+  "natural_frequency_hz": 2.755456
+}
+```
 ## Stretch ideas
 
 1. Extend the metrics schema to include fatigue/deflection data for structural dashboards.
