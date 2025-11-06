@@ -37,7 +37,7 @@ Inspect the examples under `examples/` to see how to launch Chrono jobs and capt
 
 - `chrono_mcp_core.config` - discover solver paths, activate environments.
 - `chrono_mcp_core.runner` - spawn Chrono jobs with timeout + archive logic.
-- `chrono_mcp_core.metrics` - standardise JSON metrics for the Continuous Evidence Engine.
+- `chrono_mcp_core.metrics` - standardise JSON metrics for downstream scorecards and dashboards.
 
 Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
