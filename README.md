@@ -31,13 +31,23 @@
 uv pip install "git+https://github.com/Three-Little-Birds/chrono-mcp-core.git"
 ```
 
-Inspect the examples under `examples/` to see how to launch Chrono jobs and capture metrics.
+Chrono itself must be installed separately (see the [Project Chrono install guide](https://projectchrono.org/download/)). Once `chrono::ChSystem` binaries are available, you can wrap a job like this:
+
+```python
+from chrono_mcp_core.config import ChronoConfig, load_config
+from chrono_mcp_core.runner import run_chrono_job
+
+config = load_config(default_root="~/chrono-project")
+result = run_chrono_job(config, input_script="scripts/pendulum.py", job_label="demo")
+print("Artifacts:", result.artifacts)
+print("Metrics:", result.metrics)
+```
 
 ## Key modules
 
 - `chrono_mcp_core.config` - discover solver paths, activate environments.
 - `chrono_mcp_core.runner` - spawn Chrono jobs with timeout + archive logic.
-- `chrono_mcp_core.metrics` - standardise JSON metrics for downstream scorecards and dashboards.
+- `chrono_mcp_core.metrics` - standardise JSON metrics (e.g., peak acceleration, joint travel, energy) for downstream dashboards.
 
 Use them inside a FastAPI or python-sdk transport to produce MCP-ready services.
 
