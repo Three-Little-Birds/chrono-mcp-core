@@ -115,7 +115,6 @@ Expected result:
 
 ## Accessibility & upkeep
 
-- Keep the badge set short and give each badge alt text so screen readers announce status clearly.
 - Tests run via `uv run pytest`; feel free to add more stubs to grow coverage.
 - Keep configuration defaults in sync with the consuming services (`mcp_chrono`).
 
